@@ -1,0 +1,6 @@
+bin
+build
+*.log
+*.o
+*.a
+*.so
