@@ -19,9 +19,12 @@ int List_bubble_sort(List *list, List_compare cmp)
     }
 
     int sorted = 0;
+    int skips = 0;
+    int i = 0;
 
     while (!sorted) {
         sorted = 1;
+        i = 1;
 
         LIST_FOREACH(list, first, next, cur) {
             // avoid performing a compare/swap on the final node
@@ -29,8 +32,15 @@ int List_bubble_sort(List *list, List_compare cmp)
                 if (cmp(cur->value, cur->next->value) > 0) {
                     ListNode_swap(cur, cur->next);
                     sorted = 0;
+
+                    if (i == List_count(list) - skips - 1) {
+                        skips++;
+                        break;
+                    }
                 }
             }
+
+            i++;
         }
     }
 
