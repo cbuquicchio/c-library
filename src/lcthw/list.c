@@ -25,6 +25,14 @@ void List_destroy(List *list)
     free(list);
 }
 
+void List_clear(List *list)
+{
+    LIST_FOREACH(list, first, next, cur) {
+        free(cur->value);
+        cur->value = NULL;
+    }
+}
+
 void List_push(List *list, void *value)
 {
     check(list != NULL, "List is NULL cannot perform push.");
@@ -54,21 +62,7 @@ void *List_pop(List *list)
     check(list != NULL, "List is NULL cannot perform pop.");
 
     ListNode *node = list->last;
-    void *value = node->value;
-
-    if (node == list->first && node == list->last) {
-        list->first = NULL;
-        list->last = NULL;
-    } else if (node == list->last) {
-        list->last = node->prev;
-        list->last->next = NULL;
-    }
-
-    list->count--;
-
-    free(node);
-
-    return value;
+    return list->last != NULL ? List_remove(list, node) : NULL;
 
 error:
     return NULL;
@@ -105,11 +99,35 @@ void *List_shift(List *list)
     check(list != NULL, "Cannot shift a NULL list.");
 
     ListNode *node = list->first;
+    return node != NULL ? List_remove(list, node) : NULL;
+
+error:
+    return NULL;
+}
+
+void *List_remove(List *list, ListNode *node)
+{
+    check(list != NULL, "Cannot remove from NULL list.");
+    check(node != NULL, "Cannot remove NULL node from list.");
+
     void *value = node->value;
 
     if (node == list->first && node == list->last) {
         list->first = NULL;
         list->last = NULL;
+    } else if (node == list->first) {
+        list->first = node->next;
+        check(list->first != NULL,
+                "Invalid list, somehow got a first that is NULL.");
+        node->next->prev = NULL;
+    } else if (node == list->last) {
+        list->last = node->prev;
+        check(list->last != NULL,
+                "Ivalid list, somehow got a last that is NULL.");
+        node->prev->next = NULL;
+    } else {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
     }
 
     list->count--;
