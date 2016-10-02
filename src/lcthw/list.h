@@ -15,6 +15,8 @@ typedef struct List {
   struct ListNode *last;
 } List;
 
+typedef int (*List_compare) (const void *a, const void *b);
+
 List *List_create();
 void List_destroy(List *list);
 void List_clear(List *list);
@@ -30,6 +32,9 @@ void List_unshift(List *list, void *value);
 void *List_shift(List *list);
 
 void *List_remove(List *list, ListNode *node);
+
+void List_split(List *source, List *left, List *right, int pivot);
+List *List_merge(List *left, List *right, List_compare cmp);
 
 #define LIST_FOREACH(L, S, N, C) ListNode *_node = NULL;\
                                                    ListNode *C = NULL;\

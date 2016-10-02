@@ -40,49 +40,6 @@ error:
     return -1;
 }
 
-static void List_split(List *source, List *left, List *right)
-{
-    int mid = List_count(source) / 2;
-    int count = 0;
-
-    // split list in to left and right
-    LIST_FOREACH(source, first, next, cur) {
-        if (count < mid) {
-            List_push(left, cur->value);
-        } else {
-            List_push(right, cur->value);
-        }
-
-        count++;
-    }
-}
-
-static List *List_merge(List *left, List *right, List_compare cmp)
-{
-    List *result = List_create();
-    void *value = NULL;
-
-    while (List_count(left) > 0 || List_count(right) > 0) {
-        if (List_count(left) > 0 && List_count(right) > 0) {
-            if (cmp(left->first->value, right->first->value) > 0) {
-                value = List_shift(right);
-            } else {
-                value = List_shift(left);
-            }
-
-            List_push(result, value);
-        } else if (List_count(left) > 0) {
-            value = List_shift(left);
-            List_push(result, value);
-        } else if (List_count(right) > 0) {
-            value = List_shift(right);
-            List_push(result, value);
-        }
-    }
-
-    return result;
-}
-
 List *List_merge_sort(List *list, List_compare cmp)
 {
     if (List_count(list) <= 1) {
@@ -91,8 +48,9 @@ List *List_merge_sort(List *list, List_compare cmp)
 
     List *left = List_create();
     List *right = List_create();
+    int mid = List_count(list) / 2;
 
-    List_split(list, left, right);
+    List_split(list, left, right, mid);
 
     List *left_sorted = List_merge_sort(left, cmp);
     List *right_sorted = List_merge_sort(right, cmp);

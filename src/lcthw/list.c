@@ -138,3 +138,44 @@ void *List_remove(List *list, ListNode *node)
 error:
     return NULL;
 }
+
+void List_split(List *source, List *left, List *right, int pivot)
+{
+    int count = 0;
+
+    LIST_FOREACH(source, first, next, cur) {
+        if (count < pivot) {
+            List_push(left, cur->value);
+        } else {
+            List_push(right, cur->value);
+        }
+
+        count++;
+    }
+}
+
+List *List_merge(List *left, List *right, List_compare cmp)
+{
+    List *result = List_create();
+    void *value = NULL;
+
+    while (List_count(left) > 0 || List_count(right) > 0) {
+        if (List_count(left) > 0 && List_count(right) > 0) {
+            if (cmp(left->first->value, right->first->value) > 0) {
+                value = List_shift(right);
+            } else {
+                value = List_shift(left);
+            }
+
+            List_push(result, value);
+        } else if (List_count(left) > 0) {
+            value = List_shift(left);
+            List_push(result, value);
+        } else if (List_count(right) > 0) {
+            value = List_shift(right);
+            List_push(result, value);
+        }
+    }
+
+    return result;
+}
