@@ -1,6 +1,7 @@
 #include "minunit.h"
 #include <lcthw/list_algos.h>
 #include <string.h>
+#include <time.h>
 
 char *values[] = { "XXXX", "1234", "abcd", "xjvef", "NDSS" };
 
@@ -18,12 +19,10 @@ List *create_words()
     return words;
 }
 
-int is_sorted(List *words)
+int is_sorted(List *list, List_compare cmp)
 {
-    LIST_FOREACH(words, first, next, cur) {
-        if (cur->next && strcmp(cur->value, cur->next->value) > 0) {
-            debug("%s %s", (char *)cur->value,
-                    (char *)cur->next->value);
+    LIST_FOREACH(list, first, next, cur) {
+        if (cur->next && cmp(cur->value, cur->next->value) > 0) {
             return 0;
         }
     }
@@ -36,7 +35,7 @@ char *test_bubble_sort()
     List *list = create_words();
 
     List_bubble_sort(list, (List_compare)strcmp);
-    mu_assert(is_sorted(list) == 1, "bubble sort did not sort the list.");
+    mu_assert(is_sorted(list, (List_compare)strcmp) == 1, "bubble sort did not sort the list.");
 
     List_destroy(list);
 
@@ -48,10 +47,22 @@ char *test_merge_sort()
     List *list = create_words();
 
     List *res = List_merge_sort(list, (List_compare)strcmp);
-    mu_assert(is_sorted(res) == 1, "merge sort did not sort the list.");
+    mu_assert(is_sorted(res, (List_compare)strcmp) == 1, "merge sort did not sort the list.");
 
     List_destroy(list);
     List_destroy(res);
+
+    return NULL;
+}
+
+char *test_quick_sort()
+{
+    List *list = create_words();
+
+    List_quick_sort(list, (List_compare)strcmp);
+    mu_assert(is_sorted(list, (List_compare)strcmp) == 1, "quick sort did not sort the list.");
+
+    List_destroy(list);
 
     return NULL;
 }
@@ -62,6 +73,7 @@ char *all_tests()
 
     mu_run_test(test_bubble_sort);
     mu_run_test(test_merge_sort);
+    mu_run_test(test_quick_sort);
 
     return NULL;
 }
