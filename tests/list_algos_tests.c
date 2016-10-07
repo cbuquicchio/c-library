@@ -27,7 +27,6 @@ int is_sorted(List *list, List_compare cmp)
         }
     }
 
-
     return 1;
 }
 
@@ -71,6 +70,77 @@ char *test_quick_sort()
     return NULL;
 }
 
+#define NUM_ELEMS 1000
+#define NUM_TRIALS 1000
+
+// creates list with empty nodes
+List *create_array()
+{
+    List *list = List_create();
+    int i = 0;
+
+    for (i = 0; i < NUM_ELEMS; i++) {
+        List_push(list, malloc(sizeof(int)));
+    }
+
+    return list;
+}
+
+// alloc's for each value in node
+void populate_array(int **array)
+{
+    int i = 0;
+
+    srand(time(0));
+
+    for (i = 0; i < NUM_ELEMS; i++) {
+        *array[i] = rand() % 10;
+    }
+}
+
+char *test_sort_performance()
+{
+    int i = 0;
+    int max_value = 100;
+    clock_t start;
+    clock_t end;
+    double total_time_mergesort = 0;
+    double  total_time_quicksort = 0;
+    List *list = create_array();
+    List *merge_res = NULL;
+
+    for (i = 0; i < NUM_TRIALS; i++) {
+        // give each node fresh values for each trial
+        LIST_FOREACH(list, first, next, cur) {
+            *(int *)cur->value = rand() % max_value;
+        }
+
+        start = clock();
+        merge_res = List_merge_sort(list, (List_compare)strcmp);
+        end = clock();
+
+        total_time_mergesort += (double)(end - start) / CLOCKS_PER_SEC;
+
+        start = clock();
+        List_quick_sort(list, (List_compare)strcmp);
+        end = clock();
+
+        total_time_quicksort += (double)(end - start) / CLOCKS_PER_SEC;
+    }
+
+    double result_merge = total_time_mergesort / NUM_TRIALS;
+    double result_quick = total_time_quicksort / NUM_TRIALS;
+    debug("%d elements sorted in %d trials", NUM_ELEMS, NUM_TRIALS);
+    debug("average time for merge sort: %f", result_merge);
+    debug("average time for quick sort: %f", result_quick);
+
+    List_clear(list);
+    List_destroy(list);
+
+    return NULL;
+}
+
+
 char *all_tests()
 {
     mu_suite_start();
@@ -78,6 +148,7 @@ char *all_tests()
     mu_run_test(test_bubble_sort);
     mu_run_test(test_merge_sort);
     mu_run_test(test_quick_sort);
+    mu_run_test(test_sort_performance);
 
     return NULL;
 }
