@@ -27,6 +27,7 @@ int is_sorted(List *list, List_compare cmp)
         }
     }
 
+
     return 1;
 }
 
@@ -35,7 +36,8 @@ char *test_bubble_sort()
     List *list = create_words();
 
     List_bubble_sort(list, (List_compare)strcmp);
-    mu_assert(is_sorted(list, (List_compare)strcmp) == 1, "bubble sort did not sort the list.");
+    mu_assert(is_sorted(list, (List_compare)strcmp) == 1,
+            "bubble sort did not sort the list.");
 
     List_destroy(list);
 
@@ -47,7 +49,8 @@ char *test_merge_sort()
     List *list = create_words();
 
     List *res = List_merge_sort(list, (List_compare)strcmp);
-    mu_assert(is_sorted(res, (List_compare)strcmp) == 1, "merge sort did not sort the list.");
+    mu_assert(is_sorted(res, (List_compare)strcmp) == 1,
+            "merge sort did not sort the list.");
 
     List_destroy(list);
     List_destroy(res);
@@ -60,7 +63,8 @@ char *test_quick_sort()
     List *list = create_words();
 
     List_quick_sort(list, (List_compare)strcmp);
-    mu_assert(is_sorted(list, (List_compare)strcmp) == 1, "quick sort did not sort the list.");
+    mu_assert(is_sorted(list, (List_compare)strcmp) == 1,
+            "quick sort did not sort the list.");
 
     List_destroy(list);
 

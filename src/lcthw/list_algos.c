@@ -83,32 +83,32 @@ List *List_merge_sort(List *list, List_compare cmp)
 
 static ListNode *partition(ListNode *start, ListNode *end, List_compare cmp)
 {
-	ListNode *pivot = end;
-	ListNode *last_high = start;
-	ListNode *cur = start;
+    ListNode *pivot = end;
+    ListNode *last_high = start;
+    ListNode *cur = start;
 
-	while (cur) {
-		if (cmp(cur->value, pivot->value) < 0) {
-			ListNode_swap(cur, last_high);
-			last_high = last_high->next;
-		}
+    while (cur) {
+        if (cmp(cur->value, pivot->value) < 0) {
+            ListNode_swap(cur, last_high);
+            last_high = last_high->next;
+        }
 
-		cur = cur->next;
-	}
+        cur = cur->next;
+    }
 
-	ListNode_swap(last_high, pivot);
+    ListNode_swap(last_high, pivot);
 
-	return last_high;
+    return last_high;
 }
 
 static void quick_sort_recur(ListNode *start, ListNode *end, List_compare cmp)
 {
-	if (start == end) return;
-	if (end == start->prev) return;
+    if (start == end) return;
+    if (end == start->prev) return;
 
-	ListNode *p = partition(start, end, cmp);
-	quick_sort_recur(start, p->prev, cmp);
-	quick_sort_recur(p->next, end, cmp);
+    ListNode *p = partition(start, end, cmp);
+    quick_sort_recur(start, p->prev, cmp);
+    quick_sort_recur(p->next, end, cmp);
 }
 
 void List_quick_sort(List *list, List_compare cmp)
