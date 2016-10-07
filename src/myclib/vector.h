@@ -1,8 +1,8 @@
-#ifndef _Vector_h
-#define _Vector_h
+#ifndef myclib_Vector_h
+#define myclib_Vector_h
 #include <stdlib.h>
 #include <assert.h>
-#include <lcthw/dbg.h>
+#include <myclib/dbg.h>
 
 typedef struct Vector {
     int size;

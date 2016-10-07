@@ -1,5 +1,5 @@
-#include <lcthw/vector.h>
-#include <lcthw/dbg.h>
+#include <myclib/vector.h>
+#include <myclib/dbg.h>
 #include <stdlib.h>
 
 Vector *Vector_create(size_t element_size, size_t initial_max)

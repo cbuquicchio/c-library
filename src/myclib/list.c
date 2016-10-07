@@ -1,5 +1,5 @@
-#include <lcthw/list.h>
-#include <lcthw/dbg.h>
+#include <myclib/list.h>
+#include <myclib/dbg.h>
 #include <stdlib.h>
 
 List *List_create()
