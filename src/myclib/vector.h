@@ -5,10 +5,10 @@
 #include <myclib/dbg.h>
 
 typedef struct Vector {
-    int size;
-    int max;
+    size_t end;
     size_t element_size;
     size_t expand_rate;
+    size_t max;
     void **contents;
 } Vector;
 
@@ -28,19 +28,19 @@ void *Vector_pop(Vector *array);
 
 void Vector_clear_destroy(Vector *array);
 
-#define Vector_last(A) ((A)->contents[(A)->size - 1])
+#define Vector_last(A) ((A)->contents[(A)->end - 1])
 #define Vector_first(A) ((A)->contents[0])
-#define Vector_size(A) ((A)->size)
+#define Vector_count(A) ((A)->end)
 #define Vector_max(A) ((A)->max)
 
 #define DEFAULT_EXPAND_RATE 300
 
-static inline void Vector_set(Vector *array, int i, void *el)
+static inline void Vector_set(Vector *array, size_t i, void *el)
 {
     check(i < array->max, "vector attempt to set past max.");
 
-    if (i > array->size) {
-	array->size = i + 1;
+    if (i > array->end) {
+	array->end = i + 1;
     }
 
     array->contents[i] = el;
@@ -49,7 +49,7 @@ error:
     return;
 }
 
-static inline void *Vector_get(Vector *array, int i)
+static inline void *Vector_get(Vector *array, size_t i)
 {
     check (i < array->max, "vector attempt to get past max.");
 
@@ -59,7 +59,7 @@ error:
     return NULL;
 }
 
-static inline void *Vector_remove(Vector *array, int i)
+static inline void *Vector_remove(Vector *array, size_t i)
 {
     void *el = array->contents[i];
 
