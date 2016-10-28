@@ -12,6 +12,8 @@ typedef struct Vector {
     void **contents;
 } Vector;
 
+typedef int (*Vector_compare) (const void *a, const void *b);
+
 Vector *Vector_create(size_t element_size, size_t initial_max);
 
 void Vector_destroy(Vector *array);
