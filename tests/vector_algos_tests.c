@@ -3,8 +3,8 @@
 #include "minunit.h"
 #include <myclib/vector_algos.h>
 
-#define VECTOR_SIZE 5000
-#define MAX_NUM 100
+#define VECTOR_SIZE 1000
+#define MAX_NUM 1000
 
 int is_sorted(Vector *array, Vector_compare cmp)
 {
@@ -23,7 +23,7 @@ Vector *construct_Vector()
 {
     Vector *array = Vector_create(sizeof(int), VECTOR_SIZE);
 
-    srand(time(0));
+    srand(131234);
 
     while (array->end < VECTOR_SIZE) {
         int *new_el = (int *)Vector_new(array);
@@ -47,9 +47,15 @@ int intcmp(const int *a, const int *b)
 
 char *vector_quicksort_test()
 {
+    int res = 0;
     Vector *array = construct_Vector();
 
     Vector_quick_sort(array, (Vector_compare)intcmp);
+    res = is_sorted(array, (Vector_compare)intcmp);
+
+    mu_assert(res == 1, "Vector was not sorted.");
+
+    Vector_clear_destroy(array);
 
     return NULL;
 }

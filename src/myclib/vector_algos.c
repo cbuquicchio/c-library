@@ -6,8 +6,9 @@
 static size_t qsort_partition(size_t start, size_t end, void **contents,
         Vector_compare cmp)
 {
-    // need to optimize pivot selection
-    size_t pivot = rand() % end;
+    // TODO:
+    // optimize pivot selection
+    size_t pivot = end;
     size_t wall = start;
     size_t i = 0;
     void *temp = NULL;
